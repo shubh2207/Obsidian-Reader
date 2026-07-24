@@ -1,7 +1,7 @@
 import * as pdfjsLib from "pdfjs-dist";
 import { __ertr } from "../i18n.js";
 
-export export async function extractPdf(file, app, settings = {}, onProgress) {
+export async function extractPdf(file, app, settings = {}, onProgress) {
   await setupWorker(app);
   const alsoFigOnText = settings.pdfShowFiguresOnTextPages === true;
   const buf = await app.vault.readBinary(file);

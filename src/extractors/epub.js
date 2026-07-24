@@ -331,7 +331,7 @@ export var Paginator = class {
 export async function extractEpub(file, app) {
   var _a, _b, _c, _d;
   const buf = await app.vault.readBinary(file);
-  const book = src_default(buf);
+  const book = ePub(buf);
   await book.ready;
   const spineItems = book.spine.spineItems;
   const parts = [];

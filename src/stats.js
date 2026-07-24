@@ -1,6 +1,6 @@
 import { __ertr } from "./i18n.js";
 
-export export function readerTodayKey() {
+export function readerTodayKey() {
   try {
     return window.moment ? window.moment().format("YYYY-MM-DD") : (/* @__PURE__ */ new Date()).toISOString().slice(0, 10);
   } catch (e) {

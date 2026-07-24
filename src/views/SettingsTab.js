@@ -3,7 +3,7 @@ import { __ertr } from "../i18n.js";
 import { readingStats, fmtReadTime, readerTodayKey } from "../stats.js";
 import { VIEW_TYPE, HL_COLORS } from "../constants.js";
 
-export export var SettingsTab = class extends PluginSettingTab {
+export var SettingsTab = class extends PluginSettingTab {
   constructor(app, plugin) {
     super(app, plugin);
     this.plugin = plugin;

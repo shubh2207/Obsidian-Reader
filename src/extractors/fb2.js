@@ -1,6 +1,6 @@
 import { __ertr } from "../i18n.js";
 
-export export function decodeFb2(buf) {
+export function decodeFb2(buf) {
   const bytes = new Uint8Array(buf);
   let head = "";
   for (let i = 0; i < Math.min(bytes.length, 256); i++) head += String.fromCharCode(bytes[i]);

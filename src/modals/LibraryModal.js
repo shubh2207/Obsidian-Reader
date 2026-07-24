@@ -1,8 +1,9 @@
 import { Modal, Notice, Menu, setIcon, TFile, TFolder } from "obsidian";
+import ePub from "epubjs";
 import { __ertr } from "../i18n.js";
 import { erPath, icon } from "../constants.js";
 
-export export function bookCategoryOf(bookPath, booksFolder) {
+export function bookCategoryOf(bookPath, booksFolder) {
   const base = erPath(booksFolder);
   let rel = erPath(bookPath);
   if (base && rel.startsWith(base + "/")) rel = rel.slice(base.length + 1);
@@ -470,7 +471,7 @@ export var LibraryModal = class extends Modal {
   }
   async makeEpubThumb(file) {
     const buf = await this.app.vault.readBinary(file);
-    const book = src_default(buf);
+    const book = ePub(buf);
     await book.ready;
     const coverUrl = await book.coverUrl();
     book.destroy();
