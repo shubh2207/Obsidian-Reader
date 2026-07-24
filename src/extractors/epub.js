@@ -65,6 +65,7 @@ export var Paginator = class {
 .er-flow p,.er-flow h1,.er-flow h2,.er-flow h3,.er-flow h4{
   padding-left:${pad}px;padding-right:${pad}px;margin:0 0 .75em}
 .er-flow h1,.er-flow h2,.er-flow h3,.er-flow h4{margin-top:1.1em;margin-bottom:.4em;break-after:avoid-column !important;break-after:avoid !important;-webkit-column-break-after:avoid !important;page-break-after:avoid !important;break-inside:avoid-column !important;break-inside:avoid !important;-webkit-column-break-inside:avoid !important;page-break-inside:avoid !important}
+.er-flow .dropcap,.er-flow .drop-cap,.er-flow [class*="dropcap"],.er-flow [class*="drop-cap"],.er-flow [class*="initial"],.er-flow [class*="first-letter"],.er-flow span[style*="float"],.er-flow p::first-letter{float:none!important;display:inline!important;position:static!important;font-size:inherit!important;line-height:inherit!important;margin:0!important;padding:0!important;vertical-align:baseline!important}
 .er-flow>p:first-of-type,.er-flow .er-section:first-child>p:first-child,
 .er-flow .er-section:first-child>h1:first-child,.er-flow .er-section:first-child>h2:first-child,
 .er-flow .er-section:first-child>h3:first-child{padding-top:${padVt}px}
