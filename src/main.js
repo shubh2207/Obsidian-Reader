@@ -1624,7 +1624,7 @@ var Paginator = class {
     try {
       if (!this._blockGeom) {
         const fRect = this.flow.getBoundingClientRect();
-        this._blockGeom = [...this._blocks()].map((el) => {
+        this._blockGeom = [...this._geomBlocks()].map((el) => {
           const r = el.getBoundingClientRect();
           return { x: r.left - fRect.left, bottom: r.bottom - fRect.top };
         });
@@ -1703,7 +1703,10 @@ var Paginator = class {
   // All p/h blocks in reading (column-fill) order. The SAME sequence exists on
   // phone and PC, so a block's global index pins the exact reading spot.
   _blocks() {
-    return this.flow ? this.flow.querySelectorAll("p,h1,h2,h3,h4,h5,h6,ul,ol,li,pre,figure,table,div,img") : [];
+    return this.flow ? this.flow.querySelectorAll("p,h1,h2,h3,h4,h5,h6,li,pre,table,figure") : [];
+  }
+  _geomBlocks() {
+    return this.flow ? this.flow.querySelectorAll("p,h1,h2,h3,h4,h5,h6,li,pre,figure,table,blockquote,img") : [];
   }
   // Global index of the first block at the current spread's left edge. x grows
   // monotonically with DOM order under column-fill, so binary-search it.
