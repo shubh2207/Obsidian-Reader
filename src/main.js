@@ -8,7 +8,8 @@ import {
   WorkspaceLeaf,
   TFile,
   TFolder,
-  normalizePath
+  normalizePath,
+  FuzzySuggestModal
 } from "obsidian";
 import * as pdfjsLib from "pdfjs-dist";
 import ePub from "epubjs";
