@@ -1,6 +1,7 @@
 import {
   Plugin,
   PluginSettingTab,
+  Setting,
   Modal,
   Notice,
   Menu,
