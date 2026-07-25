@@ -328,6 +328,52 @@ export var Paginator = class {
     return this.total;
   }
 };
+function normalizeDropCaps(root) {
+  if (!root || !root.querySelectorAll) return;
+  try {
+    const selectors = [
+      '.dropcap', '.drop-cap', '[class*="dropcap"]', '[class*="drop-cap"]',
+      '[class*="initial"]', '[class*="first-letter"]'
+    ];
+    const candidateSet = new Set(root.querySelectorAll(selectors.join(',')));
+    const allSpans = Array.from(root.querySelectorAll('span, div'));
+    for (const s of allSpans) {
+      if (candidateSet.has(s)) continue;
+      const style = (s.getAttribute('style') || '').toLowerCase();
+      const text = (s.textContent || '').trim();
+      if (text.length === 1 && (style.includes('float') || style.includes('font-size') || style.includes('initial'))) {
+        candidateSet.add(s);
+      }
+    }
+    const candidates = Array.from(candidateSet);
+    for (const el of candidates) {
+      if (!el || !el.parentNode) continue;
+      const text = (el.textContent || '').trim();
+      const isExplicit = el.className && typeof el.className === 'string' && /dropcap|drop-cap/i.test(el.className);
+      if (text.length > 6 && !isExplicit) continue;
+      if (el.closest('p, li, dd, dt, blockquote')) continue;
+
+      const allPars = Array.from(root.querySelectorAll('p, li, blockquote'));
+      let targetP = null;
+      for (const p of allPars) {
+        if (el.compareDocumentPosition(p) & Node.DOCUMENT_POSITION_FOLLOWING) {
+          targetP = p;
+          break;
+        }
+      }
+      if (targetP) {
+        const parentNode = el.parentNode;
+        targetP.insertBefore(el, targetP.firstChild);
+        if (parentNode && parentNode !== root && !parentNode.closest('p, li, dd, dt, blockquote')) {
+          const remainingText = (parentNode.textContent || '').trim();
+          if (!remainingText && !parentNode.querySelector('img, svg')) {
+            parentNode.remove();
+          }
+        }
+      }
+    }
+  } catch (e) {}
+}
 export async function extractEpub(file, app) {
   var _a, _b, _c, _d;
   const buf = await app.vault.readBinary(file);
@@ -339,6 +385,7 @@ export async function extractEpub(file, app) {
     try {
       const doc = await item.load(book.load.bind(book));
       const body = (_b = (_a = doc.querySelector) == null ? void 0 : _a.call(doc, "body")) != null ? _b : doc;
+      normalizeDropCaps(body);
       const imgs = Array.from((_d = (_c = body.querySelectorAll) == null ? void 0 : _c.call(body, "img")) != null ? _d : []);
       for (const img of imgs) {
         const src = img.getAttribute("src");
