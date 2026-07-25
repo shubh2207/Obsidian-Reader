@@ -120,10 +120,10 @@ var DEFAULT = {
 };
 var THEMES = {
   // Maximum contrast, no tinting: anything softer turns to mush on an e-ink panel.
-  eink: { bg: "#ffffff", text: "#000000", ui: "#ffffff", border: "#000000", accent: "#000000", muted: "#444444" },
-  dark: { bg: "#12121a", text: "#ddd8f0", ui: "#1c1c2a", border: "#2e2e45", accent: "#7c6af7", muted: "#6a6880" },
-  light: { bg: "#faf8f3", text: "#1a1a2e", ui: "#f0ede5", border: "#ddd9ce", accent: "#5548d9", muted: "#8a8678" },
-  sepia: { bg: "#f5efe3", text: "#2c2416", ui: "#ece4d2", border: "#cfc4a8", accent: "#8B6914", muted: "#9a8a68" }
+  eink: { bg: "#ffffff", text: "#000000", ui: "#ffffff", border: "#000000", accent: "#000000", muted: "#444444", backdrop: "#f0f0f0" },
+  dark: { bg: "#12121a", text: "#ddd8f0", ui: "#1c1c2a", border: "#2e2e45", accent: "#7c6af7", muted: "#6a6880", backdrop: "#0a0a0f" },
+  light: { bg: "#faf8f3", text: "#1a1a2e", ui: "#f0ede5", border: "#ddd9ce", accent: "#5548d9", muted: "#8a8678", backdrop: "#e8e5dc" },
+  sepia: { bg: "#f5efe3", text: "#2c2416", ui: "#ece4d2", border: "#cfc4a8", accent: "#8B6914", muted: "#9a8a68", backdrop: "#e5dccb" }
 };
 var FONTS = {
   georgia: "Georgia,'Times New Roman',serif",

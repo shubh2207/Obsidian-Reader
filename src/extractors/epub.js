@@ -16,14 +16,23 @@ export var Paginator = class {
     this._vCache = null;
     this._blockGeom = null;
     this.clip = container.createDiv("er-clip");
-    this.clip.style.cssText = `flex:1;align-self:stretch;overflow:hidden;position:relative;min-width:0;min-height:0;`;
+    this.clip.style.cssText = `flex:1;align-self:stretch;overflow:hidden;position:relative;min-width:0;min-height:0;background:${t.backdrop || t.bg};`;
     await new Promise((r) => requestAnimationFrame(r));
     await new Promise((r) => requestAnimationFrame(r));
     if (!container.offsetWidth) await new Promise((r) => setTimeout(r, 80));
-    const aW = this.clip.offsetWidth || container.offsetWidth || 390;
+    const rawW = this.clip.offsetWidth || container.offsetWidth || 390;
     const aH = this.clip.offsetHeight || container.offsetHeight || 700;
+
+    const wantsTwoCol = settings.columns === "2";
+    const cols = wantsTwoCol && rawW > 700 ? 2 : 1;
+
+    const fontScale = Math.max(1, (settings.fontSize || 17) / 17);
+    const MAX_PAGE_W = Math.round(640 * fontScale);
+    const MAX_SPREAD_W = Math.round(1180 * fontScale);
+    const cap = cols === 2 ? MAX_SPREAD_W : MAX_PAGE_W;
+    const aW = Math.min(rawW, cap);
+
     this.builtWidth = aW;
-    const cols = settings.columns === "2" && aW > 700 ? 2 : 1;
     const gap = cols === 2 ? 48 : 0;
     const pad = cols === 2 ? 48 : aW > 780 ? Math.max(48, Math.round((aW - 720) / 2)) : aW <= 480 ? 16 : aW <= 600 ? 22 : 42;
     const padVt = aH <= 650 ? 20 : Math.min(cols === 2 ? 48 : 40, 40);
@@ -31,6 +40,11 @@ export var Paginator = class {
     const aHinner = aH - padVt - padVtBot;
     const colW = (aW - gap * (cols - 1) - 0.5) / cols;
     const flowW = 1800 * (aW / cols);
+
+    const sideMargin = Math.max(0, (rawW - aW) / 2);
+    const isEink = settings.einkMode || settings.theme === "eink";
+    const shadowCss = isEink ? "none" : "0 1px 4px rgba(0,0,0,0.08)";
+
     this.flow = this.clip.createDiv("er-flow");
     this.flow.style.cssText = `
       width:${flowW}px;
@@ -39,6 +53,7 @@ export var Paginator = class {
       column-gap:${gap}px;
       column-fill:auto;
       position:relative;
+      left:${sideMargin}px;
       orphans:2;
       widows:2;
       padding:${padVt}px 0 ${padVtBot}px;
@@ -49,6 +64,9 @@ export var Paginator = class {
       line-height:${settings.lineHeight};
       color:${t.text};
       background:${t.bg};
+      border:0.5px solid ${t.border};
+      border-radius:6px;
+      box-shadow:${shadowCss};
       overflow:hidden;
       user-select:text;
       -webkit-user-select:text;
