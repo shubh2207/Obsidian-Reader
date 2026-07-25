@@ -9,7 +9,8 @@ import {
   TFile,
   TFolder,
   normalizePath,
-  FuzzySuggestModal
+  FuzzySuggestModal,
+  AbstractInputSuggest
 } from "obsidian";
 import * as pdfjsLib from "pdfjs-dist";
 import ePub from "epubjs";
