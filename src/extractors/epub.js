@@ -351,8 +351,11 @@ function normalizeDropCaps(root) {
       const text = (el.textContent || '').trim();
       const isExplicit = el.className && typeof el.className === 'string' && /dropcap|drop-cap/i.test(el.className);
       if (text.length > 6 && !isExplicit) continue;
+
+      // 1. SAFEGUARD: Well-formed EPUBs already inside a paragraph/list/blockquote are untouched
       if (el.closest('p, li, dd, dt, blockquote')) continue;
 
+      // 2. Find nearest following paragraph
       const allPars = Array.from(root.querySelectorAll('p, li, blockquote'));
       let targetP = null;
       for (const p of allPars) {
@@ -361,9 +364,27 @@ function normalizeDropCaps(root) {
           break;
         }
       }
+
       if (targetP) {
+        // 3. SAFEGUARD: Do not reattach across heading boundaries (h1..h6)
+        const headings = Array.from(root.querySelectorAll('h1, h2, h3, h4, h5, h6'));
+        const headingBetween = headings.some(h =>
+          (el.compareDocumentPosition(h) & Node.DOCUMENT_POSITION_FOLLOWING) &&
+          (h.compareDocumentPosition(targetP) & Node.DOCUMENT_POSITION_FOLLOWING)
+        );
+        if (headingBetween) continue;
+
         const parentNode = el.parentNode;
-        targetP.insertBefore(el, targetP.firstChild);
+        const targetText = (targetP.textContent || '').trim();
+
+        // 4. SAFEGUARD: Prevent duplicate letters (e.g. standalone "D" + paragraph starting with "Discovery")
+        if (text && targetText.startsWith(text)) {
+          el.remove();
+        } else {
+          targetP.insertBefore(el, targetP.firstChild);
+        }
+
+        // Clean up parent container if it became empty
         if (parentNode && parentNode !== root && !parentNode.closest('p, li, dd, dt, blockquote')) {
           const remainingText = (parentNode.textContent || '').trim();
           if (!remainingText && !parentNode.querySelector('img, svg')) {
