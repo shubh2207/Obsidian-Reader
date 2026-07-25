@@ -1631,11 +1631,15 @@ var Paginator = class {
       }
       const from = this._spreadOffset(), to = from + this.sw;
       let maxBottom = 0;
-      for (const g of this._blockGeom) if (g.x >= from - 2 && g.x < to - 2 && g.bottom > maxBottom) maxBottom = g.bottom;
+      for (const g of this._blockGeom) if (g.x >= from - 25 && g.x < to + 25 && g.bottom > maxBottom) maxBottom = g.bottom;
       const height = this.flow.clientHeight || 0;
       if (maxBottom > 0 && height > 0) {
         const leftover = height - maxBottom;
-        if (leftover > height * SHORT_PAGE_GAP) off = mode === "center" ? leftover / 2 : leftover;
+        if (leftover > height * SHORT_PAGE_GAP) {
+          off = mode === "center" ? leftover / 2 : leftover;
+          const maxAllowedOff = Math.max(0, height - maxBottom);
+          off = Math.min(off, maxAllowedOff, height * 0.25);
+        }
       }
     } catch (e) {
       off = 0;
@@ -1699,7 +1703,7 @@ var Paginator = class {
   // All p/h blocks in reading (column-fill) order. The SAME sequence exists on
   // phone and PC, so a block's global index pins the exact reading spot.
   _blocks() {
-    return this.flow ? this.flow.querySelectorAll("p,h1,h2,h3,h4") : [];
+    return this.flow ? this.flow.querySelectorAll("p,h1,h2,h3,h4,h5,h6,ul,ol,li,pre,figure,table,div,img") : [];
   }
   // Global index of the first block at the current spread's left edge. x grows
   // monotonically with DOM order under column-fill, so binary-search it.
